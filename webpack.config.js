@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const entry = {
   cart: './cart.html',
@@ -10,12 +11,18 @@ const entry = {
   shop: './shop.html',
 }
 
-const plugins = Object.values(entry).map((filename) => {
-  return new HtmlWebpackPlugin({
-    template: path.resolve(__dirname, filename),
-    filename,
-  });
-});
+const plugins = [
+  ...Object.values(entry).map((filename) => {
+    return new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, filename),
+      filename,
+    });
+  }),
+  new MiniCssExtractPlugin({
+    filename: 'css/[name].[chunkhash:8].css',
+    chunkFilename: 'css/[name].[chunkhash:8].chunk.js',
+  }),
+];
 
 module.exports = {
   context: __dirname,
@@ -38,6 +45,10 @@ module.exports = {
       {
         test: /\.html$/i,
         loader: 'html-loader',
+      },
+      {
+        test: /\.s?css/i,
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader'],
       }
     ]
   }
