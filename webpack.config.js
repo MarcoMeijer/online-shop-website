@@ -1,10 +1,18 @@
 const path = require('path');
 module.exports = {
   context: __dirname,
-  entry: './js/main.js',
+  entry: {
+    main: './js/main.js',
+    easing: './lib/easing/easing.js',
+    owlcarousel: './lib/owlcarousel/owl.carousel.js',
+    contact: './mail/contact.js',
+  },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'main.js',
+    filename: '[name].js',
+  },
+  externals: {
+    jquery: 'jQuery',
   },
   module: {
     rules: [
